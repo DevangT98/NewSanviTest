@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
+
+import com.dev.testsanvioms.database.ProductModel;
 
 import java.util.List;
 
@@ -41,7 +44,7 @@ public class Adapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
         layoutInflater = LayoutInflater.from(context);
-        View view = layoutInflater.inflate(R.layout.item, container, false);
+        final View view = layoutInflater.inflate(R.layout.item, container, false);
         final ImageView productImage;
         TextView productName, productPrice;
         Button addToCartButton;
@@ -54,30 +57,40 @@ public class Adapter extends PagerAdapter {
         addToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int image = models.get(position).getProductImage();
+                String image = String.valueOf(models.get(position).getProductImage());
                 String name = models.get(position).getProductName();
                 String category = models.get(position).getProductCategory();
                 String price = models.get(position).getProductPrice();
-                Log.i("YAY","*******************************");
-                Log.i("YAY","YOU CLICKED ME: "+image);
-                Log.i("YAY","YOU CLICKED ME: "+name);
-                Log.i("YAY","YOU CLICKED ME: "+category);
-                Log.i("YAY","YOU CLICKED ME: "+price);
-                Log.i("YAY","*******************************");
 
-                Intent i = new Intent(context.getApplicationContext(),CartActivity.class);
-                i.putExtra("productImage",image);
-                i.putExtra("productName",name);
-                i.putExtra("productPrice",price);
-                i.putExtra("productCategory",category);
-                context.startActivity(i);
+                ProductModel.getInstance(v.getContext());
+                ProductModel.open();
+                ProductModel.insert(image,name,category,price);
+                ProductModel.close();
+                Toast.makeText(view.getContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
+
+                ProductModel.open();
+                ProductModel.showAll();
+                ProductModel.close();
+//                Log.i("YAY", "*******************************");
+//                Log.i("YAY", "YOU CLICKED ME: " + image);
+//                Log.i("YAY", "YOU CLICKED ME: " + name);
+//                Log.i("YAY", "YOU CLICKED ME: " + category);
+//                Log.i("YAY", "YOU CLICKED ME: " + price);
+//                Log.i("YAY", "*******************************");
+/*
+                Intent i = new Intent(context.getApplicationContext(), CartActivity.class);
+                i.putExtra("productImage", image);
+                i.putExtra("productName", name);
+                i.putExtra("productPrice", price);
+                i.putExtra("productCategory", category);
+                context.startActivity(i);*/
             }
         });
 
-        productImage.setImageResource(models.get(position).getProductImage());
+        productImage.setImageResource(Integer.parseInt(models.get(position).getProductImage()));
         productName.setText(models.get(position).getProductName());
         productPrice.setText(models.get(position).getProductPrice());
-        container.addView(view,0);
+        container.addView(view, 0);
 
         return view;
 

@@ -1,23 +1,23 @@
 package com.dev.testsanvioms;
 
 public class Model {
-    private int productImage;
+    private String productImage;
     private String productName;
     private String productPrice;
     private String productCategory;
 
-    public Model(int productImage, String productName, String productPrice, String productCategory) {
+    public Model(String productImage, String productName, String productPrice, String productCategory) {
         this.productImage = productImage;
         this.productName = productName;
         this.productPrice = productPrice;
         this.productCategory = productCategory;
     }
 
-    public int getProductImage() {
+    public String getProductImage() {
         return productImage;
     }
 
-    public void setProductImage(int productImage) {
+    public void setProductImage(String productImage) {
         this.productImage = productImage;
     }
 
